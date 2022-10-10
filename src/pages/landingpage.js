@@ -1,5 +1,8 @@
 import React,{useState,useEffect} from 'react';
 import httpClient from "../httpClient";
+import ClassesNav from "../classesNav"
+import MainView from "../mainView"
+
 
 
 const LandingPage = () => {
@@ -8,7 +11,7 @@ const LandingPage = () => {
     const logoutUser = async () =>{
         await httpClient.post("//localhost:4999/logout")
         .catch(err=>{
-            console.log("You fucked up");
+            console.log("You messed up");
         });
         window.location.href="/";
     };
@@ -27,14 +30,21 @@ const LandingPage = () => {
     },[]);
 
     return (
-        <div>
+        <div id="header">
             <h1>Welcome</h1>
             {user != null ? (
-                <div>
-                    <h2>Logged in</h2>
-                    <h3>Email: {user.email} </h3>
-                    <h3>ID: {user.id} </h3>
-                    <button onClick={logoutUser}>Logout</button>
+                <div id="container">
+                    <div id="left">
+                        <h5>Logged in</h5>
+                        <h5>Email: {user.email} </h5>
+                        <h5>ID: {user.id} </h5>
+                        <button onClick={logoutUser}>Logout</button>
+                        <ClassesNav user_id={user.id}/>
+                    </div>
+                    <div id="right">
+                        <h2>HELLO</h2>
+                        <MainView/>
+                    </div>
                 </div>
             ):(
                 <div>

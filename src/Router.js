@@ -14,6 +14,7 @@ const Router = () => {
                 <Route path="/" element ={<LandingPage/>}/>
                 <Route path="/login" element ={<Login/>}/>
                 <Route path="/register" element ={<Register/>}/>
+                <Route path="/:user_id/:class_id" element={<mainView/>}/>
                 <Route path="*" element={<NotFound/>}/>
             </Routes>
         </BrowserRouter>
