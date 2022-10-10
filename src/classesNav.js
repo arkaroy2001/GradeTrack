@@ -17,7 +17,7 @@ const ClassesNav = ({user_id})=>{
                 for(let i=0; i<res.data.json_list.length;i++){
                     setClassList(current=>[
                         ...current,
-                        res.data.json_list[i]["class_name"]
+                        res.data.json_list[i]
                     ]);
                     console.log(res.data.json_list[i]["class_name"]);
                 };
@@ -45,7 +45,7 @@ const ClassesNav = ({user_id})=>{
             console.log("Add class successful");
             setClassList(current=>[
                 ...current,
-                currClass
+                {'class_name':currClass}
             ]);
         })
         .catch(err=>{
@@ -79,10 +79,10 @@ const ClassesNav = ({user_id})=>{
         <form>
             <h3>Classes</h3>
             <ul>
-                {classNames.map((classnam) =>
+                {classNames.map(item =>
                 <li key={v4()}>
-                    <Link to={`/${user_id}/`}>{classnam}</Link>
-                    <button type="button" onClick={() => handleDelete(classnam)}>-</button>
+                    <Link to={`/${user_id}/${item.id}`}>{item.class_name}</Link>
+                    <button type="button" onClick={() => handleDelete(item.class_name)}>-</button>
                 </li>
                 )}
             </ul>

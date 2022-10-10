@@ -1,8 +1,13 @@
 import React from 'react'
+import { useParams } from "react-router-dom";
 
 const MainView = () =>{
+    const { userId,classId } = useParams();
     return(
-        <h1>F</h1>
+        <div>
+        <h1>{userId}</h1>
+        <h1>{classId}</h1>
+        </div>
     )
 }
 

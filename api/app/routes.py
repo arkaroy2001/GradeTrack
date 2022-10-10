@@ -147,7 +147,7 @@ def getCurrClassId():
     if not user_id:
         return jsonify({"error":"Unauthorized"}),401
 
-    
+
 
 def getClassId(user_id,class_name):
     return Classes.query.filter_by(user_id=user_id,class_name=class_name).first()
