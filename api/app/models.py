@@ -17,7 +17,7 @@ class User(db.Model):
     def serialize(self):
        """Return object data in easily serializable format"""
        return {
-           'id'         : self.id,
+           'user.id'         : self.id,
            'username' : self.username,
            'email'         : self.email
        }
@@ -39,7 +39,7 @@ class Classes(db.Model):
     def serialize(self):
        """Return object data in easily serializable format"""
        return {
-           'id'         : self.id,
+           'class_id'         : self.id,
            'class_name' : self.class_name,
            'timestamp'         : self.timestamp,
            'user_id'         : self.user_id
@@ -55,15 +55,25 @@ class Classes(db.Model):
     def __repr__(self):
         return '<Task {}>'.format(self.class_name)
 
+
+#grades of the class 
+#name: HW
+#group_type: 
+#grade: 50%
+#weight: 20
+#class_id: cse120
+#user_id:6
+
 class Group(db.Model):
     __tablename__ = 'group'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(64))
-    type = db.Column(db.String(10))
+    group_type = db.Column(db.String(10))
     grade = db.Column(db.Integer, default=0)
     weight = db.Column(db.Integer)
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    class_name = db.Column(db.String(64), db.ForeignKey('classes.class_name'))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     def __repr__(self):
         return '<Task {}>'.format(self.name)
@@ -72,14 +82,15 @@ class Group(db.Model):
     def serialize(self):
        """Return object data in easily serializable format"""
        return {
-           'id'         : self.id,
+           'main_group_id'         : self.id,
            'main_group_name' : self.name,
-           'type':self.type,
-           'grade':self.grade,
-           'weight':self.weight,
+           'group_type':self.group_type,
+           'main_group_grade':self.grade,
+           'main_group_weight':self.weight,
            'timestamp'         : self.timestamp,
            'user_id'         : self.user_id,
-           'class_id': self.class_id
+           'class_id': self.class_id,
+           'class_name':self.class_name
        }
 
 # class SubGroup(db.Model):

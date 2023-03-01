@@ -7,7 +7,7 @@ const Register =()=>{
     const [password,setPassword] = useState("")
 
     const registerUser = async ()=>{
-        await httpClient.post("//localhost:4999/register",{
+        await httpClient.post("//localhost:4998/register",{
             email,
             username,
             password

@@ -3,6 +3,7 @@ from flask.json import jsonify
 from app import calc_app, db
 from app import bcrypt
 from app.models import User, Classes, Group
+import sys
 
 
 @calc_app.route('/register', methods=['POST'])
@@ -48,7 +49,6 @@ def get_all_users():
 
     return jsonify(json_list=[i.serialize for i in users])
     
-
 @calc_app.route('/login', methods=['POST'])
 def login():
     email = request.json.get("email", None)
@@ -70,6 +70,7 @@ def login():
 def logout():
     session.pop("user_id")
     return "200"
+    
 
 @calc_app.route('/add-class', methods=["POST"])
 def addClass():
@@ -92,9 +93,17 @@ def addClass():
     db.session.add(new_class)
     db.session.commit()
 
+    i_d = getClass(user_id,class_name)
+
+    if not i_d:
+        return jsonify({"error":"Unauthorized"}),400
+
+    class_id = i_d
+
     return jsonify({
-        "id": user_id,
-        "class_name": class_name
+        "user_id": user_id,
+        "class_name": class_name,
+        "class_id":class_id.id
     })
 
 @calc_app.route('/get-classes',methods=['GET'])
@@ -137,7 +146,7 @@ def removeClass():
 
     return jsonify({
         "id": user_id,
-        "class_name": class_name 
+        "class_name": class_name,
     })
 
 @calc_app.route('/get-class-id')
@@ -147,10 +156,12 @@ def getCurrClassId():
     if not user_id:
         return jsonify({"error":"Unauthorized"}),401
 
-
-
-def getClassId(user_id,class_name):
+def getClass(user_id,class_name):
     return Classes.query.filter_by(user_id=user_id,class_name=class_name).first()
+
+def getClassName(user_id,class_id):
+    return Classes.query.filter_by(user_id=user_id,id=class_id).first()
+
 
 @calc_app.route('/add-main-group', methods=['POST'])
 def addNewMain():
@@ -159,46 +170,89 @@ def addNewMain():
     if not user_id:
         return jsonify({"error":"Unauthorized"}),401
 
-    main_name = request.json.get('main-group-name')
+    main_group_name = request.json.get('main_group_name')
+    class_id = request.json.get('main_class_id')
+    weight = request.json.get('main_group_weight')
+    grade = request.json.get('main_group_grade')
 
-    if main_name=="" or main_name is None:
-        return jsonify({"error":"Unauthorized"}),400
+    if main_group_name=="" or main_group_name is None:
+        return jsonify({"error":main_group_name}),406
 
-    class_name = request.json.get('main-class-name')
-    class_id = getClassId(user_id,class_name)
+    if class_id=="" or class_id is None:
+        return jsonify({"error":class_id}),402
 
-    if not class_id:
-        return jsonify({"error":"Unauthorized"}),400
+    class_name = getClassName(user_id,class_id)
 
-    type = 'main'
-    weight = request.json.get('main-group-weight')
+    
 
-
-    group_exists = Group.query.filter_by(user_id=user_id,name=main_name,class_id=class_id.id,type=type).first()
+    group_type = 'main'
+    
+    group_exists = Group.query.filter_by(user_id=user_id,name=main_group_name,class_id=class_id,group_type=group_type,class_name=class_name.class_name).first()
 
     if group_exists is not None:
         return jsonify({"error": "Unauthorized"}),409
 
-    new_group = Group(name=main_name,type=type,weight=weight,class_id=class_id.id,user_id=user_id)
+    new_group = Group(grade=grade,class_name=class_name.class_name,name=main_group_name,group_type=group_type,weight=weight,class_id=class_id,user_id=user_id)
     
     db.session.add(new_group)
     db.session.commit()
 
-    return jsonify({
-        "id": user_id,
-        "group_name": main_name,
-        "class_name": class_name
-    })
+    # return jsonify({
+    #     "id": user_id,
+    #     "group_name": main_name,
+    #     "class_name": class_name
+    # })
+    return jsonify(new_group.serialize)
 
-@calc_app.route('/get-main-groups',methods=['GET'])
-def getMainGroups():
+@calc_app.route('/get-all-main-groups',methods=['GET'])
+def getAllMainGroups():
     user_id = session.get("user_id")
 
     if not user_id:
         return jsonify({"error":"Unauthorized"}),401
 
     classes_name = Group.query.filter_by(user_id=user_id).all()
-
+    print(classes_name)
     return jsonify(json_list=[i.serialize for i in classes_name])
 
+@calc_app.route('/get-main-group',methods=['POST'])
+def getMainGroup():
+    user_id = session.get("user_id")
+    class_id = request.json.get('class_id',None)
 
+    if not user_id:
+        return jsonify({"error":"Unauthorized"}),401
+
+    classes_name = Group.query.filter_by(user_id=user_id,class_id=class_id).all()
+    print(classes_name)
+    return jsonify(json_list=[i.serialize for i in classes_name])
+
+# def updateMainGroup():
+#     user_id = session.get("user_id")
+
+#     if not user_id:
+#         return jsonify({"error":"Unauthorized"}),401
+
+#     main_name = request.json.get('main-group-name')
+
+@calc_app.route('/delete-main-group',methods=['POST'])
+def removeMainGroup():
+    main_group_name = request.json.get("name")
+    #class_name = request.json.get("class_name")
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return jsonify({"error":"Unauthorized"}),401
+    
+    maingroup_and_user_exists = Group.query.filter_by(user_id=user_id,name=main_group_name).first()
+    
+    if maingroup_and_user_exists is None:
+        return jsonify({"error": "Unauthorized"}),409
+
+    db.session.delete(maingroup_and_user_exists)
+    db.session.commit()
+
+    return jsonify({
+        "id": user_id,
+        "main_group_name": main_group_name
+    })

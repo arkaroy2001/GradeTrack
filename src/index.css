@@ -37,16 +37,104 @@ html,body{
 }
 
 #left{
-  width:265px;
+  width:13%;
   flex-grow: 0;
   flex-shrink: 0;
   height: 100%;
   background-color: lightgray;
-  flex-shrink: 0;
+  padding:7px;
 }
 
 #right{
-  width:85%;
+  width:92%;
   height: 100%;
+  padding: 10px;
 }
 
+.main-group-container{
+  width:50%;
+}
+
+input {
+  max-width: 100%;
+}
+
+input[name="main_group_grade"],input[name="main_group_weight"]{
+  width:40%;
+  margin: auto;
+  display: block;
+}
+
+table,th,td{
+  border: 2px solid rgb(200, 200, 200);
+  border-collapse: collapse;
+}
+
+thead {
+    background-color: #3f87a6;
+    color: #fff;
+}
+
+td,
+th {
+    border: 1px solid rgb(190, 190, 190);
+    padding: 5px 10px;
+}
+
+td{
+  background-color: #d3e9f1;
+}
+
+#main-group-form{
+  width:100%;
+}
+
+#add-class-to-list{
+  width:80%;
+}
+
+.main-group-input{
+  width:100%;
+}
+
+/* .main-group-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 1rem;
+} */
+
+/* table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border: 1px solid #ffffff;
+  text-align: left;
+  padding: 8px;
+  font-size: 32px;
+}
+
+th {
+  background-color: rgb(117, 201, 250);
+}
+
+td {
+  background-color: rgb(205, 235, 253);
+}
+
+form {
+  display: flex;
+  gap: 5px;
+}
+
+form td:last-child {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+form * {
+  font-size: 28px;
+} */

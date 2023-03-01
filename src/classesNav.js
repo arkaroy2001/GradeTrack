@@ -11,18 +11,17 @@ const ClassesNav = ({user_id})=>{
 
     useEffect(()=>{
         (async()=>{
-            await httpClient.get("//localhost:4999/get-classes")
+            await httpClient.get("//localhost:4998/get-classes")
             .then(res=>{
-                console.log("BITCH",res.data.json_list);
+                //console.log("BITCH",res.data.json_list);
                 for(let i=0; i<res.data.json_list.length;i++){
                     setClassList(current=>[
                         ...current,
                         res.data.json_list[i]
                     ]);
-                    console.log(res.data.json_list[i]["class_name"]);
+                    //console.log(res.data.json_list[i]["class_name"]);
                 };
-                
-                console.log("HAHAH", classNames.length)
+                //console.log("HAHAH", classNames.length)
             })
             .catch(err=>{
                 console.log("Not authenticated",err);
@@ -38,15 +37,18 @@ const ClassesNav = ({user_id})=>{
     }
 
     const addClass = async () =>{
-        await httpClient.post("//localhost:4999/add-class",{
+        await httpClient.post("//localhost:4998/add-class",{
             currClass
         })
         .then(res=>{
             console.log("Add class successful");
             setClassList(current=>[
                 ...current,
-                {'class_name':currClass}
+                {'class_name':res.data.class_name,
+                 'user_id':res.data.user_id,
+                 'class_id':res.data.class_id}
             ]);
+            console.log(classNames)
         })
         .catch(err=>{
            alert("Duplicate class name not allowed",err) ;
@@ -63,7 +65,7 @@ const ClassesNav = ({user_id})=>{
     }
 
     const removeClass = async (id) =>{
-        await httpClient.post("//localhost:4999/remove-class",{
+        await httpClient.post("//localhost:4998/remove-class",{
             id
         })
         .then(res=>{
@@ -81,7 +83,7 @@ const ClassesNav = ({user_id})=>{
             <ul>
                 {classNames.map(item =>
                 <li key={v4()}>
-                    <Link to={`/${user_id}/${item.id}`}>{item.class_name}</Link>
+                    <Link to ={`/${item.user_id}/${item.class_id}`}>{item.class_name}</Link>
                     <button type="button" onClick={() => handleDelete(item.class_name)}>-</button>
                 </li>
                 )}
@@ -92,6 +94,7 @@ const ClassesNav = ({user_id})=>{
                 name="className" 
                 placeholder="class name" 
                 required="required"
+                id="add-class-to-list"
                 value={currClass} onChange={(e)=>setNewClass(e.target.value)}
             />
         </form>

@@ -2,14 +2,17 @@ import React,{useState,useEffect} from 'react';
 import httpClient from "../httpClient";
 import ClassesNav from "../classesNav"
 import MainView from "../mainView"
+import { useParams, Outlet } from "react-router-dom";
 
 
 
 const LandingPage = () => {
     const [user,setUser] = useState(null);
 
+    // const {userId,classId} = useParams();
+
     const logoutUser = async () =>{
-        await httpClient.post("//localhost:4999/logout")
+        await httpClient.post("//localhost:4998/logout")
         .catch(err=>{
             console.log("You messed up");
         });
@@ -18,7 +21,7 @@ const LandingPage = () => {
 
     useEffect(()=>{
         (async()=>{
-            await httpClient.get("//localhost:4999/@me")
+            await httpClient.get("//localhost:4998/@me")
             .then(res=>{
                 setUser(res.data);
             })
@@ -30,8 +33,7 @@ const LandingPage = () => {
     },[]);
 
     return (
-        <div id="header">
-            <h1>Welcome</h1>
+        <div id="header">  
             {user != null ? (
                 <div id="container">
                     <div id="left">
@@ -42,8 +44,7 @@ const LandingPage = () => {
                         <ClassesNav user_id={user.id}/>
                     </div>
                     <div id="right">
-                        <h2>HELLO</h2>
-                        <MainView/>
+                        <Outlet/>
                     </div>
                 </div>
             ):(

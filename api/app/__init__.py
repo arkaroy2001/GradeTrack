@@ -13,7 +13,7 @@ CORS(calc_app,supports_credentials=True)
 # calc_app.config['CORS_HEADERS'] = 'Content-Type'
 bcrypt = Bcrypt(calc_app)
 db = SQLAlchemy(calc_app)
-migrate = Migrate(calc_app, db)
+migrate = Migrate(calc_app, db,render_as_batch=True)
 server_session = Session(calc_app)
 
 from app import routes, models 

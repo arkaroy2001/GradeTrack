@@ -11,5 +11,5 @@ class Config(object):
 
     SESSION_TYPE = 'redis'
     SESSION_PERMANENT = False
-    SESSION_USE_SIGNER = True
+    SESSION_USE_SIGNER = True  #sign the session cookie sid
     SESSION_REDIS = redis.from_url("redis://127.0.0.1:6379")
