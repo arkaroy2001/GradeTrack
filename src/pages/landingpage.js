@@ -39,7 +39,6 @@ const LandingPage = () => {
                     <div id="left">
                         <h5>Logged in</h5>
                         <h5>Email: {user.email} </h5>
-                        <h5>ID: {user.id} </h5>
                         <button onClick={logoutUser}>Logout</button>
                         <ClassesNav user_id={user.id}/>
                     </div>

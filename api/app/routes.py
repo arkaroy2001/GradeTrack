@@ -256,3 +256,20 @@ def removeMainGroup():
         "id": user_id,
         "main_group_name": main_group_name
     })
+
+
+@calc_app.route('/get-final-grade',methods=['POST'])
+def calculateFinalGrade():
+    user_id = request.json.get("user_id")
+    class_id = request.json.get("class_id")
+
+    if not user_id:
+        return jsonify({"error":"Unauthorized"}),401
+
+    class_exists = Classes.query.filter_by(user_id=user_id,id=class_id).all()
+
+    if class_exists is None:
+        return jsonify({"error": "Unauthorized"}),409
+
+    return jsonify(json_list=[i.serialize for i in class_exists])
+

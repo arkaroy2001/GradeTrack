@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     errorElement:<ErrorPage/>,
     children:[
       {
-        path:":user_id/:class_id",
+        path:":user_id/:class_id", 
         element:<MainView/>
       }
     ]

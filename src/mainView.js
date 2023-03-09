@@ -5,9 +5,43 @@ import { v4 } from 'uuid';
 import EditableRow from './EditableRow.js'
 
 
-{/* view for the grades for the class */}
+/* view for the grades for the class */
 const MainView = () =>{
-    
+    //passed down from landingpage.js
+    const { user_id,class_id } = useParams();
+
+    //handles the state of the list of main groups for a class
+    const [mainGroups, setMainGroups] = useState([])
+
+    //handles the state of the new main group the user adds
+    const [mainGroupData, setNewMainGroup] = useState({
+        main_group_name: '',
+        main_group_grade:'',
+        main_group_weight: ''
+    })
+
+
+    const [finalGrade, setFinalGrade] = useState('')
+
+    useEffect(()=>{
+            (async()=>{
+                await httpClient.post("//localhost:4998/get-final-grade",{
+                    "user_id":user_id,
+                    "class_id":class_id
+                })
+                .then(res=>{
+                    setFinalGrade('');
+                    console.log(res.data.json_list[0]["grade"]);
+                    setFinalGrade(res.data.json_list[0]["grade"].toString());
+                })
+                .catch(err=>{
+                    console.log(err)
+                })
+                
+            })()
+    },[mainGroups]);
+        /* used to clear the input of the text of the 
+        add main group input form*/
         const textInput1 = React.useRef();
         const clearInput1 = () => (
             textInput1.current.value = ""
@@ -22,20 +56,16 @@ const MainView = () =>{
         const clearInput3 = () => (
             textInput3.current.value = ""
         );
+
     
     
-    const { user_id,class_id } = useParams();
-    const [mainGroups, setMainGroups] = useState([])
+
     const param = {
         class_id: class_id,
       };
 
-    const [mainGroupData, setNewMainGroup] = useState({
-        main_group_name: '',
-        main_group_grade:'',
-        main_group_weight: ''
-    })
 
+    //gets called when user starts typing in one of the main group input forms 
     const handleAddMainGroup = (event)=>{
         event.preventDefault();
 
@@ -48,6 +78,7 @@ const MainView = () =>{
         setNewMainGroup(newMainGroupData);
     }
 
+    //handles submitting the new main group information
     const handleSubmit = (event)=>{
         event.preventDefault();
         addNewMainGroup();
@@ -61,6 +92,7 @@ const MainView = () =>{
         clearInput3();
     }
 
+    //handles the api call for adding a main group
     const addNewMainGroup=async()=>{
         await httpClient.post("//localhost:4998/add-main-group",{
             "main_group_name": mainGroupData.main_group_name,
@@ -94,11 +126,15 @@ const MainView = () =>{
         })
         
     }
+
+    //if we change the class in the class navigation, then this
+    //methods runs again for the correct class and fetches the 
+    //main groups for that class
     useEffect(()=>{
             (async()=>{
                 await httpClient.post("//localhost:4998/get-main-group",param)
                 .then(res=>{
-                    console.log(res.data);
+                    //console.log(res.data);
                     setMainGroups([]); //wipes curr group data clean depending on which class user picks
                     setMainGroups(res.data.json_list);
                 })
@@ -111,12 +147,10 @@ const MainView = () =>{
 
     return(
         <div>
-            <h1>Final Grade: </h1>
-            <h1>{user_id}</h1>
-            <h1>{class_id}</h1>
+            <h1>Final Grade: {finalGrade}</h1>
             <div className="main-group-container">
                 <form id="main-group-form">
-                    <table class="main-group">
+                    <table class="main-group" draggable='true'>
                         <thead>
                             <tr>
                                 <th></th>
