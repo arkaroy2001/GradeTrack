@@ -227,16 +227,8 @@ def getMainGroup():
     print(classes_name)
     return jsonify(json_list=[i.serialize for i in classes_name])
 
-# def updateMainGroup():
-#     user_id = session.get("user_id")
-
-#     if not user_id:
-#         return jsonify({"error":"Unauthorized"}),401
-
-#     main_name = request.json.get('main-group-name')
-
 @calc_app.route('/delete-main-group',methods=['POST'])
-def removeMainGroup():
+def removeSingleMainGroup():
     main_group_name = request.json.get("name")
     #class_name = request.json.get("class_name")
     user_id = session.get("user_id")
@@ -257,6 +249,29 @@ def removeMainGroup():
         "main_group_name": main_group_name
     })
 
+@calc_app.route('/delete-all-main-groups',methods=['POST'])
+def removeAllMainGroupsForClass():
+    #main_group_name = request.json.get("name")
+    #class_name = request.json.get("class_name")
+    user_id = session.get("user_id")
+    class_id = request.json.get("class_id")
+
+    if not user_id:
+        return jsonify({"error":"Unauthorized"}),401
+    
+    class_groups = Group.query.filter_by(user_id=user_id,class_id=class_id).all()
+    
+    if class_groups is None:
+        return jsonify({"error": "Unauthorized"}),409
+
+    for i in class_groups:
+        db.session.delete(i)
+        db.session.commit()
+
+    return jsonify({
+        "id": user_id,
+        "class_id": class_id
+    })
 
 @calc_app.route('/get-final-grade',methods=['POST'])
 def calculateFinalGrade():

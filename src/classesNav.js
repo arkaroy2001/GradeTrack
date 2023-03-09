@@ -55,8 +55,21 @@ const ClassesNav = ({user_id})=>{
         })
     }
 
+    const removeGroupsForClass = async(id) =>{
+        await httpClient.post("//localhost:4998/delete-all-main-groups",{
+            "class_id":id
+        })
+        .then(res=>{
+            console.log("Remove all groups successfull");
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
+
     const handleDelete = (id) =>{
         removeClass(id);
+        removeGroupsForClass(id);
         const newClassNames = [...classNames];
 
         newClassNames.splice(newClassNames.indexOf(id), 1);
