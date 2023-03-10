@@ -43,6 +43,19 @@ def get_current_user():
         "email": user.email 
     })
 
+@calc_app.route('/correct-user',methods=['GET'])
+def correctUser():
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return jsonify({"error":"Unauthorized"}),401
+
+    
+    return jsonify({
+        "uid":user_id
+    })
+
+
 @calc_app.route('/get-all-users')
 def get_all_users():
     users = User.query.all()
@@ -254,12 +267,12 @@ def removeAllMainGroupsForClass():
     #main_group_name = request.json.get("name")
     #class_name = request.json.get("class_name")
     user_id = session.get("user_id")
-    class_id = request.json.get("class_id")
+    class_name = request.json.get("class_name")
 
     if not user_id:
         return jsonify({"error":"Unauthorized"}),401
     
-    class_groups = Group.query.filter_by(user_id=user_id,class_id=class_id).all()
+    class_groups = Group.query.filter_by(user_id=user_id,class_name=class_name).all()
     
     if class_groups is None:
         return jsonify({"error": "Unauthorized"}),409
@@ -270,7 +283,7 @@ def removeAllMainGroupsForClass():
 
     return jsonify({
         "id": user_id,
-        "class_id": class_id
+        "class_name": class_name
     })
 
 @calc_app.route('/get-final-grade',methods=['POST'])

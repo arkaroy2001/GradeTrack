@@ -1,13 +1,13 @@
 import React from 'react'
 import httpClient from './httpClient'
 
-const EditableRow = ({maingroups,mainGroups,setMainGroups}) => {
+const EditableRow = ({maingroups,mainGroups,setMainGroups,index}) => {
     const handleDelete = (name)=>{
         removeMainGroup(name);
 
         const newMainGroups = [...mainGroups]
 
-        newMainGroups.splice(newMainGroups.indexOf(name),1);
+        newMainGroups.splice(index,1);
 
         setMainGroups(newMainGroups);
     }
@@ -27,7 +27,7 @@ const EditableRow = ({maingroups,mainGroups,setMainGroups}) => {
         <tr>
             <td>
             <button type="button" 
-            onClick={()=>handleDelete(maingroups.main_group_name)}>x</button></td>
+            onClick={()=>handleDelete(maingroups.main_group_name,index)}>x</button></td>
             <td>
                 <input 
                 type="text" 

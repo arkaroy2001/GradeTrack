@@ -1,14 +1,19 @@
-import React, { useState,useEffect, Fragment } from 'react'
+import React, { useState,useEffect, Fragment,useNavigate } from 'react'
 import { useParams } from "react-router-dom";
 import httpClient from './httpClient';
 import { v4 } from 'uuid';
 import EditableRow from './EditableRow.js'
+import ErrorPage from './pages/error-page';
+
 
 
 /* view for the grades for the class */
 const MainView = () =>{
+    //const navigate = useNavigate();
+
     //passed down from landingpage.js
     const { user_id,class_id } = useParams();
+    const [user, setUser] = useState(null);
 
     //handles the state of the list of main groups for a class
     const [mainGroups, setMainGroups] = useState([])
@@ -20,8 +25,20 @@ const MainView = () =>{
         main_group_weight: ''
     })
 
-
     const [finalGrade, setFinalGrade] = useState('')
+
+    useEffect(()=>{
+        (async()=>{
+            await httpClient.get("//localhost:4998/correct-user")
+            .then(res=>{
+                //console.log(res.data);
+                setUser(res.data);
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+        })()
+    },[]);
 
     useEffect(()=>{
             (async()=>{
@@ -30,12 +47,19 @@ const MainView = () =>{
                     "class_id":class_id
                 })
                 .then(res=>{
-                    setFinalGrade('');
-                    console.log(res.data.json_list[0]["grade"]);
-                    setFinalGrade(res.data.json_list[0]["grade"].toString());
+                    if(!res.data.json_list[0].grade){
+                        setFinalGrade("0");
+                    }
+                    else{
+                        setFinalGrade('');
+                        //console.log("HERE");
+                        //console.log(res.data.json_list[0]["grade"]);
+                        setFinalGrade(res.data.json_list[0]["grade"].toString());
+                    }  
                 })
                 .catch(err=>{
-                    console.log(err)
+                    console.log("IDK",err);
+                    setFinalGrade('x');
                 })
                 
             })()
@@ -56,13 +80,6 @@ const MainView = () =>{
         const clearInput3 = () => (
             textInput3.current.value = ""
         );
-
-    
-    
-
-    const param = {
-        class_id: class_id,
-      };
 
 
     //gets called when user starts typing in one of the main group input forms 
@@ -127,6 +144,10 @@ const MainView = () =>{
         
     }
 
+    const param = {
+        class_id: class_id,
+      };
+
     //if we change the class in the class navigation, then this
     //methods runs again for the correct class and fetches the 
     //main groups for that class
@@ -145,56 +166,69 @@ const MainView = () =>{
             })()
     },[class_id]);
 
+    if (!user) {
+        console.log("HERE");
+        return <>Still loading...</>;
+      }
+
     return(
         <div>
-            <h1>Final Grade: {finalGrade}</h1>
-            <div className="main-group-container">
-                <form id="main-group-form">
-                    <table class="main-group" draggable='true'>
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Group name</th>
-                                <th>Grade (%)</th>
-                                <th>Weight</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {mainGroups.map((maingroups)=>
-                                <Fragment>
-                                    <EditableRow key={v4()} 
-                                    maingroups={maingroups}
-                                    mainGroups={mainGroups}
-                                    setMainGroups={setMainGroups}
-                                    />
-                                </Fragment>
-                                )}
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td><button type="submit" 
-                                onClick={handleSubmit}>Add</button></td>
-                                <td><input type="text" name="main_group_name"
-                                required="required" ref={textInput1}
-                                class="main-group-input"
-                                placeholder="e.g Homework"
-                                onChange={handleAddMainGroup}/></td>
+            {(user.uid==user_id) && (finalGrade != 'x') ? (
+                <div>
+                    <h1>Final Grade: {finalGrade}</h1>
+                    <div className="main-group-container">
+                        <form id="main-group-form">
+                            <table class="main-group" draggable='true'>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Group name</th>
+                                        <th>Grade (%)</th>
+                                        <th>Weight</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {mainGroups.map((maingroups,index)=>
+                                        <Fragment>
+                                            <EditableRow key={v4()} 
+                                            maingroups={maingroups}
+                                            mainGroups={mainGroups}
+                                            setMainGroups={setMainGroups}
+                                            index={index}
+                                            />
+                                        </Fragment>
+                                        )}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td><button type="submit" 
+                                        onClick={handleSubmit}>Add</button></td>
+                                        <td><input type="text" name="main_group_name"
+                                        required="required" ref={textInput1}
+                                        class="main-group-input"
+                                        placeholder="e.g Homework"
+                                        onChange={handleAddMainGroup}/></td>
+        
+                                        <td><input type="text" name="main_group_grade"
+                                        required="required" ref={textInput2}
+                                        class="main-group-input"
+                                        onChange={handleAddMainGroup}/></td>
+        
+                                        <td><input type="text" name="main_group_weight"
+                                        required="required" ref={textInput3}
+                                        class="main-group-input"
+                                        onChange={handleAddMainGroup}/></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            
+                        </form>
+                    </div>
+                </div>
+            ):(
+                <ErrorPage/>
+            )}
 
-                                <td><input type="text" name="main_group_grade"
-                                required="required" ref={textInput2}
-                                class="main-group-input"
-                                onChange={handleAddMainGroup}/></td>
-
-                                <td><input type="text" name="main_group_weight"
-                                required="required" ref={textInput3}
-                                class="main-group-input"
-                                onChange={handleAddMainGroup}/></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    
-                </form>
-            </div>
         </div>
     )
 }

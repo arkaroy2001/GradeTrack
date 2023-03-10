@@ -1,10 +1,10 @@
 import React, { useState,useEffect} from 'react';
 import httpClient from './httpClient';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid'
 
 const ClassesNav = ({user_id})=>{
-
+    let navigate = useNavigate();
     const [classNames, setClassList] = useState([]);
 
     const [currClass,setNewClass] = useState('');
@@ -56,8 +56,9 @@ const ClassesNav = ({user_id})=>{
     }
 
     const removeGroupsForClass = async(id) =>{
+        console.log(id);
         await httpClient.post("//localhost:4998/delete-all-main-groups",{
-            "class_id":id
+            "class_name":id
         })
         .then(res=>{
             console.log("Remove all groups successfull");
@@ -67,22 +68,25 @@ const ClassesNav = ({user_id})=>{
         })
     }
 
-    const handleDelete = (id) =>{
-        removeClass(id);
+    const handleDelete = (id,index) =>{
+        removeClass(id,index);
         removeGroupsForClass(id);
         const newClassNames = [...classNames];
 
-        newClassNames.splice(newClassNames.indexOf(id), 1);
+        newClassNames.splice(index, 1);
         
         setClassList(newClassNames);
+        //return <Navigate to="/" />
     }
 
-    const removeClass = async (id) =>{
+    const removeClass = async (id,index) =>{
         await httpClient.post("//localhost:4998/remove-class",{
             id
         })
         .then(res=>{
             console.log("Remove class successful");
+            //window.location.href="/" + user_id + "/" +classNames[index-1].class_id;
+            navigate("/" + user_id + "/" +classNames[index-1].class_id);
         })
         .catch(err=>{
            alert("Class doesn't exist",err) ;
@@ -94,10 +98,10 @@ const ClassesNav = ({user_id})=>{
         <form>
             <h3>Classes</h3>
             <ul>
-                {classNames.map(item =>
+                {classNames.map((item,index) =>
                 <li key={v4()}>
                     <Link to ={`/${item.user_id}/${item.class_id}`}>{item.class_name}</Link>
-                    <button type="button" onClick={() => handleDelete(item.class_name)}>-</button>
+                    <button type="button" onClick={() => handleDelete(item.class_name,index)}>-</button>
                 </li>
                 )}
             </ul>
