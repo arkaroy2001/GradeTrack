@@ -1,9 +1,10 @@
-import React, { useState,useEffect, Fragment,useNavigate } from 'react'
+import React, { useState,useEffect, useMemo, useCallback} from 'react'
 import { useParams } from "react-router-dom";
 import httpClient from './httpClient';
 import { v4 } from 'uuid';
-import EditableRow from './EditableRow.js'
 import ErrorPage from './pages/error-page';
+import cloneDeep from 'lodash/cloneDeep';
+import debounce from 'lodash.debounce';
 
 
 
@@ -144,6 +145,29 @@ const MainView = () =>{
         
     }
 
+    const handleDelete = (name,index)=>{
+        console.log("PALOOZA " + index);
+
+        const newMainGroups = cloneDeep(mainGroups);
+
+        newMainGroups.splice(index,1);
+
+        setMainGroups(newMainGroups);
+        removeMainGroup(name);
+    }
+
+    const removeMainGroup = async(name)=>{
+        await httpClient.post("//localhost:4998/delete-main-group",{
+            name
+        })
+        .then(res=>{
+            console.log("Remove main group successful");
+        })
+        .catch(err=>{
+            alert(err);
+        })
+    }
+
     const param = {
         class_id: class_id,
       };
@@ -165,6 +189,98 @@ const MainView = () =>{
                  
             })()
     },[class_id]);
+
+    const handleNameChange = (event) => {
+        // 👇 Get input value from "event"
+        //console.log(mainGroups);
+        let original_name = event.target.getAttribute('value'); //original value
+        let new_name = event.target.value; //new value
+        console.log(event.target.getAttribute('name'));
+        updateMainGroupName(original_name,new_name)//send api call
+        //update original value in maingroup 
+      };
+
+    const debouncedNameChangeHandler = useMemo(
+    () => debounce(handleNameChange, 2000)
+    , []);
+
+    const updateMainGroupName = async (og_name, new_name) =>{
+        console.log(class_id,og_name,new_name);
+        await httpClient.put("//localhost:4998/update-main-group-name",{
+            class_id,
+            og_name,
+            new_name
+        })
+        .then(res=>{
+            console.log("update group name success");
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
+
+      const handleGradeChange = (event) => {
+        // 👇 Get input value from "event"
+        //console.log(mainGroups);
+        let og_grade = event.target.getAttribute('value')//original value
+        let new_grade = event.target.value; //new value
+        let name = event.target.parentNode.parentNode.childNodes[1].firstChild.getAttribute('value');
+        console.log(event.target.getAttribute('name'))
+        updateMainGroupGrade(og_grade, new_grade, name );//send api call
+        //update original value in maingroup 
+      };
+
+      const debouncedGradeChangeHandler = useMemo(
+        () => debounce(handleGradeChange, 2000)
+      , []);
+
+      const updateMainGroupGrade = async (og_grade, new_grade,name) =>{
+        console.log(class_id,og_grade,new_grade);
+        await httpClient.put("//localhost:4998/update-main-group-grade",{
+            class_id,
+            og_grade,
+            new_grade,
+            name
+        })
+        .then(res=>{
+            console.log("update group name success");
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
+
+      const handleWeightChange = (event) => {
+        // 👇 Get input value from "event"
+        //console.log(mainGroups);
+        let og_weight = event.target.getAttribute('value')//original value
+        let new_weight = event.target.value; //new value
+        console.log(event.target.getAttribute('name'))
+        let name = event.target.parentNode.parentNode.childNodes[1].firstChild.getAttribute('value');
+        updateMainGroupWeight(og_weight,new_weight,name);//send api call
+        //update original value in maingroup 
+      };
+
+      const debouncedWeightChangeHandler = useMemo(
+        () => debounce(handleWeightChange, 2000)
+      , []);
+
+      const updateMainGroupWeight = async (og_weight, new_weight,name) =>{
+        console.log(class_id,og_weight,new_weight,name);
+        await httpClient.put("//localhost:4998/update-main-group-weight",{
+            class_id,
+            og_weight,
+            new_weight,
+            name
+        })
+        .then(res=>{
+            console.log("update group name success");
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
+
 
     if (!user) {
         console.log("HERE");
@@ -189,14 +305,44 @@ const MainView = () =>{
                                 </thead>
                                 <tbody>
                                     {mainGroups.map((maingroups,index)=>
-                                        <Fragment>
-                                            <EditableRow key={v4()} 
-                                            maingroups={maingroups}
-                                            mainGroups={mainGroups}
-                                            setMainGroups={setMainGroups}
-                                            index={index}
-                                            />
-                                        </Fragment>
+                                        <tr key={v4()}>
+                                            <td id={"BOOBS " + index}>
+                                                <button type="button" 
+                                                onClick={()=>handleDelete(maingroups.main_group_name,index)}>x</button>
+                                            </td>
+                                            <td>
+                                                <input 
+                                                type="text" 
+                                                required="required" 
+                                                placeholder="e.g HW"
+                                                name="main_group_name"
+                                                class="main-group-input"
+                                                defaultValue={maingroups.main_group_name}
+                                                onChange={debouncedNameChangeHandler}
+                                                ></input>
+                                            </td>
+                                            <td>
+                                            <input 
+                                                type="text" 
+                                                required="required" 
+                                                name="main_group_grade"
+                                                class="main-group-input"
+                                                defaultValue={maingroups.main_group_grade}
+                                                onChange={debouncedGradeChangeHandler}
+                                                ></input>
+                                            </td>
+                                            <td>
+                                            <input 
+                                                type="text" 
+                                                required="required" 
+                                                name="main_group_weight"
+                                                class="main-group-input"
+                                                //onChange={handleChange}
+                                                defaultValue={maingroups.main_group_weight}
+                                                onChange={debouncedWeightChangeHandler}
+                                                ></input>
+                                            </td>
+                                        </tr>
                                         )}
                                 </tbody>
                                 <tfoot>

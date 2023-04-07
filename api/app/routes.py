@@ -196,8 +196,6 @@ def addNewMain():
 
     class_name = getClassName(user_id,class_id)
 
-    
-
     group_type = 'main'
     
     group_exists = Group.query.filter_by(user_id=user_id,name=main_group_name,class_id=class_id,group_type=group_type,class_name=class_name.class_name).first()
@@ -216,6 +214,68 @@ def addNewMain():
     #     "class_name": class_name
     # })
     return jsonify(new_group.serialize)
+
+@calc_app.route('/update-main-group-name', methods=['PUT'])
+def updateSingleMainGroupName():
+    user_id = session.get("user_id")
+    class_id = request.json.get('class_id')
+    original_name = request.json.get('og_name')
+    new_name = request.json.get('new_name')
+    
+    if not user_id:
+        return jsonify({"error":"Unauthorized"}),401
+
+    main_group = Group.query.filter_by(user_id=user_id,class_id=class_id,name=original_name).first()
+    main_group.name = new_name
+    db.session.commit()
+
+    return jsonify({
+        "id": user_id,
+        "new_maingroup_name": main_group.name
+    })
+
+@calc_app.route('/update-main-group-grade', methods=['PUT'])
+def updateSingleMainGroupGrade():
+    user_id = session.get("user_id")
+    class_id = request.json.get('class_id')
+    name = request.json.get('name')
+    original_grade = request.json.get('og_grade')
+    new_grade = request.json.get('new_grade')
+    
+    if not user_id:
+        return jsonify({"error":"Unauthorized"}),401
+
+    main_group = Group.query.filter_by(user_id=user_id,class_id=class_id,name=name, grade = original_grade).first()
+    main_group.grade = new_grade
+    db.session.commit()
+
+    return jsonify({
+        "id": user_id,
+        "main_group_name": name,
+        "new_maingroup_grade": main_group.grade
+    })
+
+@calc_app.route('/update-main-group-weight', methods=['PUT'])
+def updateSingleMainGroupWeight():
+    user_id = session.get("user_id")
+    class_id = request.json.get('class_id')
+    name=request.json.get('name')
+    original_weight = request.json.get('og_weight')
+    new_weight = request.json.get('new_weight')
+    
+    if not user_id:
+        return jsonify({"error":"Unauthorized"}),401
+
+    main_group = Group.query.filter_by(user_id=user_id,class_id=class_id,name=name,weight=original_weight).first()
+    main_group.weight = new_weight
+    db.session.commit()
+
+    return jsonify({
+        "id": user_id,
+        "new_maingroup_weight": main_group.weight
+    })
+
+    
 
 @calc_app.route('/get-all-main-groups',methods=['GET'])
 def getAllMainGroups():
