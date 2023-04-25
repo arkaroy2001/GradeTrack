@@ -1,5 +1,5 @@
 import React, { useState,useEffect} from 'react'
-import { useParams } from "react-router-dom";
+import { useParams,useLocation } from "react-router-dom";
 import httpClient from './httpClient';
 import { v4 } from 'uuid';
 import ErrorPage from './pages/error-page';
@@ -10,11 +10,12 @@ import cloneDeep from 'lodash/cloneDeep';
 
 /* view for the grades for the class */
 const MainView = () =>{
-    //const navigate = useNavigate();
-
+    //class name
+    let {state} = useLocation();
     //passed down from landingpage.js
     const { user_id,class_id } = useParams();
     const [user, setUser] = useState(null);
+
 
     //handles the state of the list of main groups for a class
     const [mainGroups, setMainGroups] = useState([])
@@ -60,7 +61,7 @@ const MainView = () =>{
                     }  
                 })
                 .catch(err=>{
-                    console.log("IDK",err);
+                    //console.log("IDK",err);
                     setFinalGrade('x');
                 })
                 
@@ -294,16 +295,21 @@ const MainView = () =>{
 
     if (!user) {
         return <>Still loading...</>;
-      }
+    }
+
+    // if (mainGroups.length ==0) {
+    //     return <>Still loading...</>;
+    // }
 
     return(
         <div>
             {(user.uid==user_id) && (finalGrade != 'x') ? (
                 <div>
+                    <h1>{state}</h1>
                     <h1>Final Grade: {finalGrade}</h1>
                     <div className="main-group-container">
                         <form id="main-group-form">
-                            <table class="main-group" draggable='true'>
+                            <table class="main-group">
                                 <thead>
                                     <tr>
                                         <th></th>
@@ -318,6 +324,7 @@ const MainView = () =>{
                                             <td id={"BOOBS " + index}>
                                                 <button type="button" 
                                                 onClick={()=>handleDelete(maingroups.main_group_name,index)}>x</button>
+                                                <input type="radio" name="radAnswer"/>
                                             </td>
                                             <td>
                                                 <input 
@@ -348,7 +355,7 @@ const MainView = () =>{
                                                 class="main-group-input"
                                                 //onChange={handleChange}
                                                 defaultValue={maingroups.main_group_weight}
-                                                onChange={(event) => handleWeightChange(event,index)}
+                                                onBlur={(event) => handleWeightChange(event,index)}
                                                 ></input>
                                             </td>
                                         </tr>

@@ -100,7 +100,7 @@ const ClassesNav = ({user_id})=>{
             <ul>
                 {classNames.map((item,index) =>
                 <li key={v4()}>
-                    <Link to ={`/${item.user_id}/${item.class_id}`}>{item.class_name}</Link>
+                    <Link to ={`/${item.user_id}/${item.class_id}`} state={item.class_name}>{item.class_name}</Link>
                     <button type="button" onClick={() => handleDelete(item.class_name,index)}>-</button>
                 </li>
                 )}

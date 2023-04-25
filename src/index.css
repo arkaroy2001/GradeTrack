@@ -97,6 +97,10 @@ td{
   width:100%;
 }
 
+/* input[type=number] {
+  -moz-appearance: textfield;
+} */
+
 /* .main-group-container {
   display: flex;
   flex-direction: column;

@@ -39,7 +39,7 @@ class User(db.Model,Base):
 
 #grades of the class 
 #name: HW
-#group_type: 
+#group_type: main or sub
 #grade: 50%
 #weight: 20
 #class_id: cse120
