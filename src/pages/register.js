@@ -21,14 +21,16 @@ const Register =()=>{
         })
     }
     return (
-        <div>
-            <h1>Create an account</h1>
-            <form>
-                <input type="text" placeholder="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
-                <input type="text" placeholder="username" value={username} onChange={(e)=>setUsername(e.target.value)}/>
-                <input type="text" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
-                <button type="button" onClick={registerUser}>Login</button>
-            </form>
+        <div class="page">
+            <div class="form">
+                <h1>Register</h1>
+                <form id="signup-form">
+                    <input type="text" placeholder="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
+                    <input type="text" placeholder="username" value={username} onChange={(e)=>setUsername(e.target.value)}/>
+                    <input type="text" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
+                    <button type="button" onClick={registerUser}>Login</button>
+                </form>
+            </div>
         </div>
     )
 }

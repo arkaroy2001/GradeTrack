@@ -7,9 +7,26 @@ import { useParams, Outlet } from "react-router-dom";
 
 
 const LandingPage = () => {
-    const [user,setUser] = useState(null);
+    const [user,setUser] = useState();
 
     // const {userId,classId} = useParams();
+
+    const [email,setEmail] = useState("")
+    const [password,setPassword] = useState("")
+
+    const logInUser = async ()=>{
+        await httpClient.post("//localhost:4998/login",{
+            email,
+            password
+        })
+        .then(res=>{
+            console.log("Logged in");
+            window.location.href="/"
+        })
+        .catch(err=>{
+            alert("Invalid credentials")
+        })
+    }
 
     const logoutUser = async () =>{
         await httpClient.post("//localhost:4998/logout")
@@ -27,18 +44,22 @@ const LandingPage = () => {
             })
             .catch(err=>{
                 console.log("Not authenticated");
+                setUser('x');
             })
              
         })()
     },[]);
 
+    if (user === undefined) {
+        return <>Still loading...</>;
+      }
+
     return (
         <div id="header">  
-            {user != null ? (
+            {user != 'x' ? (
                 <div id="container">
                     <div id="left">
-                        <h5>Logged in</h5>
-                        <h5>Email: {user.email} </h5>
+                        <h5>{user.email} </h5>
                         <button onClick={logoutUser}>Logout</button>
                         <ClassesNav user_id={user.id}/>
                     </div>
@@ -48,13 +69,19 @@ const LandingPage = () => {
                 </div>
             ):(
                 <div>
-                    <p>You are not logged in</p>
-                    <a href="/login">
-                        <button>Login</button>
-                    </a>
-                    <a href="/register">
-                        <button>Register</button>
-                    </a>
+                    <div class="page">
+                        <div class="form">
+                            <form id="login-form">
+                                <h1>Sign In</h1>
+                                <input type="text" placeholder="E-mail" value={email} onChange={(e)=>setEmail(e.target.value)}/>
+                                <input id="signin-password" type="text" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
+                                <button type="button" onClick={logInUser}>Login</button>
+                            </form>
+                            <a href="/register">
+                                <p>Register</p>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

@@ -4,7 +4,6 @@ import './index.css';
 import {createBrowserRouter,RouterProvider} from 'react-router-dom';
 import LandingPage from './pages/landingpage';
 import ErrorPage from './pages/error-page';
-import Login from './pages/login';
 import Register from './pages/register';
 import MainView from './mainView';
 
@@ -20,10 +19,6 @@ const router = createBrowserRouter([
         errorElement:<ErrorPage/>
       }
     ]
-  },
-  {
-    path:"/login",
-    element: <Login/>
   },
   {
     path:"/register",

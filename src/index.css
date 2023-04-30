@@ -4,6 +4,10 @@
   box-sizing:border-box;
 }
 
+*:after, *:before {
+  box-sizing: border-box;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -97,48 +101,30 @@ td{
   width:100%;
 }
 
-/* input[type=number] {
-  -moz-appearance: textfield;
-} */
+.page {
+  width: 360px;
+  padding: 8% 0 0;
+  margin: auto;
+}
 
-/* .main-group-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 1rem;
-} */
+.form {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 360px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
 
-/* table {
-  border-collapse: collapse;
+.form input {
+  outline: 0;
+  background: #f2f2f2;
   width: 100%;
-}
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
 
-th,
-td {
-  border: 1px solid #ffffff;
-  text-align: left;
-  padding: 8px;
-  font-size: 32px;
 }
-
-th {
-  background-color: rgb(117, 201, 250);
-}
-
-td {
-  background-color: rgb(205, 235, 253);
-}
-
-form {
-  display: flex;
-  gap: 5px;
-}
-
-form td:last-child {
-  display: flex;
-  justify-content: space-evenly;
-}
-
-form * {
-  font-size: 28px;
-} */

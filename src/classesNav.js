@@ -86,7 +86,12 @@ const ClassesNav = ({user_id})=>{
         .then(res=>{
             console.log("Remove class successful");
             //window.location.href="/" + user_id + "/" +classNames[index-1].class_id;
-            navigate("/" + user_id + "/" +classNames[index-1].class_id);
+            if(classNames.length-1== 0){navigate("/");}
+            else if(index==0){
+                navigate("/" + user_id + "/" +classNames[index+1].class_id);
+            }else{
+                navigate("/" + user_id + "/" +classNames[index-1].class_id);
+            }
         })
         .catch(err=>{
            alert("Class doesn't exist",err) ;

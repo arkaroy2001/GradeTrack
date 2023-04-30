@@ -324,7 +324,6 @@ const MainView = () =>{
                                             <td id={"BOOBS " + index}>
                                                 <button type="button" 
                                                 onClick={()=>handleDelete(maingroups.main_group_name,index)}>x</button>
-                                                <input type="radio" name="radAnswer"/>
                                             </td>
                                             <td>
                                                 <input 
