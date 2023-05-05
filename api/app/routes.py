@@ -4,10 +4,27 @@ from app import calc_app, db
 from app import bcrypt
 from app.models import User, Classes, Group
 import sys
+from app import calc_app
+from user_agents import parse
 
+#makes sure to check which browser the https request is arriving from to configure appropriately
+def checkBrowser():
+    user_agent_string = request.headers.get('User-Agent')
+    user_agent = parse(user_agent_string)
+    print(user_agent.browser.family)
+    if user_agent.browser.family == 'Safari':
+        calc_app.config['SESSION_COOKIE_SECURE'] = True
+        calc_app.config['SESSION_COOKIE_SAMESITE'] = "None"
+
+    else:
+        calc_app.config['SESSION_COOKIE_SECURE'] = True
+        calc_app.config['SESSION_COOKIE_SAMESITE'] = "None"
+
+    return
 
 @calc_app.route('/register', methods=['POST'])
 def register():
+    checkBrowser()
     email = request.json.get("email", None)
     username = request.json.get("username",None)
     password = request.json.get('password', None)
@@ -31,6 +48,7 @@ def register():
 
 @calc_app.route('/@me')
 def get_current_user():
+    checkBrowser()
     user_id = session.get("user_id")
 
     if not user_id:
@@ -45,6 +63,7 @@ def get_current_user():
 
 @calc_app.route('/correct-user',methods=['GET'])
 def correctUser():
+    checkBrowser()
     user_id = session.get("user_id")
 
     if not user_id:
@@ -64,7 +83,7 @@ def get_all_users():
 
 @calc_app.route('/delete-all-users',methods=['POST'])
 def removeAllUsers():
-
+    checkBrowser()
     all_users = User.query.all()
     
     if all_users is None:
@@ -78,6 +97,7 @@ def removeAllUsers():
     
 @calc_app.route('/login', methods=['POST'])
 def login():
+    checkBrowser()
     email = request.json.get("email", None)
     password = request.json.get('password', None)
 
@@ -98,12 +118,14 @@ def login():
 
 @calc_app.route('/logout', methods=["POST"])
 def logout():
+    checkBrowser()
     session.pop("user_id")
     return "200"
     
 
 @calc_app.route('/add-class', methods=["POST"])
 def addClass():
+    checkBrowser()
     class_name = request.json.get("currClass")
     user_id = session.get("user_id")
 
@@ -138,6 +160,7 @@ def addClass():
 
 @calc_app.route('/get-classes',methods=['GET'])
 def getClasses():
+    checkBrowser()
     user_id = session.get("user_id")
 
     if not user_id:
@@ -149,6 +172,7 @@ def getClasses():
 
 @calc_app.route('/get-class-names',methods=['GET'])
 def getClassNames():
+    checkBrowser()
     user_id = session.get("user_id")
 
     if not user_id:
@@ -160,6 +184,7 @@ def getClassNames():
 
 @calc_app.route('/remove-class', methods=["POST"])
 def removeClass():
+    checkBrowser()
     class_name = request.json.get("id")
     user_id = session.get("user_id")
 
@@ -181,6 +206,7 @@ def removeClass():
 
 @calc_app.route('/get-class-id')
 def getCurrClassId():
+    checkBrowser()
     user_id = session.get("user_id")
 
     if not user_id:
@@ -195,6 +221,7 @@ def getClassName(user_id,class_id):
 
 @calc_app.route('/add-main-group', methods=['POST'])
 def addNewMain():
+    checkBrowser()
     user_id = session.get("user_id")
 
     if not user_id:
@@ -238,6 +265,7 @@ def addNewMain():
 
 @calc_app.route('/update-main-group-name', methods=['PUT'])
 def updateSingleMainGroupName():
+    checkBrowser()
     user_id = session.get("user_id")
     class_id = request.json.get('class_id')
     original_name = request.json.get('og_name')
@@ -257,6 +285,7 @@ def updateSingleMainGroupName():
 
 @calc_app.route('/update-main-group-grade', methods=['PUT'])
 def updateSingleMainGroupGrade():
+    checkBrowser()
     user_id = session.get("user_id")
     class_id = request.json.get('class_id')
     name = request.json.get('name')
@@ -278,6 +307,7 @@ def updateSingleMainGroupGrade():
 
 @calc_app.route('/update-main-group-weight', methods=['PUT'])
 def updateSingleMainGroupWeight():
+    checkBrowser()
     user_id = session.get("user_id")
     class_id = request.json.get('class_id')
     name=request.json.get('name')
@@ -300,6 +330,7 @@ def updateSingleMainGroupWeight():
 
 @calc_app.route('/get-all-main-groups',methods=['GET'])
 def getAllMainGroups():
+    checkBrowser()
     user_id = session.get("user_id")
 
     if not user_id:
@@ -311,6 +342,7 @@ def getAllMainGroups():
 
 @calc_app.route('/get-main-group',methods=['POST'])
 def getMainGroup():
+    checkBrowser()
     user_id = session.get("user_id")
     class_id = request.json.get('class_id',None)
 
@@ -323,6 +355,7 @@ def getMainGroup():
 
 @calc_app.route('/delete-main-group',methods=['POST'])
 def removeSingleMainGroup():
+    checkBrowser()
     main_group_name = request.json.get("name")
     #class_name = request.json.get("class_name")
     user_id = session.get("user_id")
@@ -351,6 +384,7 @@ def getClassIdFromName(name,user_id):
 
 @calc_app.route('/delete-all-main-groups',methods=['POST'])
 def removeAllMainGroupsForClass():
+    checkBrowser()
     #main_group_name = request.json.get("name")
     #class_name = request.json.get("class_name")
     user_id = session.get("user_id")
@@ -377,6 +411,7 @@ def removeAllMainGroupsForClass():
 
 @calc_app.route('/get-final-grade',methods=['POST'])
 def calculateFinalGrade():
+    checkBrowser()
     user_id = request.json.get("user_id")
     class_id = request.json.get("class_id")
 

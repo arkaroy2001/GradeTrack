@@ -17,8 +17,8 @@ class Config(object):
             os.environ.get('DATABASE_URL')
         SESSION_REDIS = redis.from_url("redis://default:8ae7eb3a9e494687872e669601a0a575@fly-gradecalc.upstash.io")
 
-    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}     
-                           
+    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True} 
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     SESSION_TYPE = 'redis'

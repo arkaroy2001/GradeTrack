@@ -26,6 +26,8 @@ python-dotenv==0.21.0
 redis==4.3.4
 six==1.16.0
 SQLAlchemy==1.4.41
+ua-parser==0.16.1
+user-agents==2.2.0
 Werkzeug==2.2.2
 wrapt==1.14.1
 zipp==3.8.1
