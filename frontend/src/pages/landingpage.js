@@ -1,13 +1,18 @@
 import React,{useState,useEffect} from 'react';
 import httpClient from "../httpClient";
 import ClassesNav from "../classesNav"
-import MainView from "../mainView"
-import { useParams, Outlet } from "react-router-dom";
+import {Outlet } from "react-router-dom";
+import {websiteUrl} from '../index.js'
 
 
 
 const LandingPage = () => {
     const [user,setUser] = useState();
+    // let x = 0;
+    // const REMOTE_URL = process.env.REACT_APP_REMOTE_URL
+    // const LOCAL_URL = process.env.REACT_APP_LOCAL_URL
+    // let url;
+
 
     // const {userId,classId} = useParams();
 
@@ -15,7 +20,7 @@ const LandingPage = () => {
     const [password,setPassword] = useState("")
 
     const logInUser = async ()=>{
-        await httpClient.post("https://gradetrack.fly.dev/login",{
+        await httpClient.post(websiteUrl + "/login",{
             email,
             password
         })
@@ -29,7 +34,7 @@ const LandingPage = () => {
     }
 
     const logoutUser = async () =>{
-        await httpClient.post("https://gradetrack.fly.dev/logout")
+        await httpClient.post(websiteUrl + "/logout")
         .catch(err=>{
             console.log("You messed up");
         });
@@ -38,7 +43,7 @@ const LandingPage = () => {
 
     useEffect(()=>{
         (async()=>{
-            await httpClient.get("https://gradetrack.fly.dev/@me")
+            await httpClient.get(websiteUrl + "/@me")
             .then(res=>{
                 setUser(res.data);
             })

@@ -2,6 +2,7 @@ import React, { useState,useEffect} from 'react';
 import httpClient from './httpClient';
 import { Link, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid'
+import {websiteUrl} from './index.js'
 
 const ClassesNav = ({user_id})=>{
     let navigate = useNavigate();
@@ -11,7 +12,7 @@ const ClassesNav = ({user_id})=>{
 
     useEffect(()=>{
         (async()=>{
-            await httpClient.get("https://gradetrack.fly.dev/get-classes")
+            await httpClient.get(websiteUrl + "/get-classes")
             .then(res=>{
                 //console.log("BITCH",res.data.json_list);
                 for(let i=0; i<res.data.json_list.length;i++){
@@ -37,7 +38,7 @@ const ClassesNav = ({user_id})=>{
     }
 
     const addClass = async () =>{
-        await httpClient.post("https://gradetrack.fly.dev/add-class",{
+        await httpClient.post(websiteUrl + "/add-class",{
             currClass
         })
         .then(res=>{
@@ -57,7 +58,7 @@ const ClassesNav = ({user_id})=>{
 
     const removeGroupsForClass = async(id) =>{
         console.log(id);
-        await httpClient.post("https://gradetrack.fly.dev/delete-all-main-groups",{
+        await httpClient.post(websiteUrl + "/delete-all-main-groups",{
             "class_name":id
         })
         .then(res=>{
@@ -80,7 +81,7 @@ const ClassesNav = ({user_id})=>{
     }
 
     const removeClass = async (id,index) =>{
-        await httpClient.post("https://gradetrack.fly.dev/remove-class",{
+        await httpClient.post(websiteUrl + "/remove-class",{
             id
         })
         .then(res=>{

@@ -30,3 +30,10 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <RouterProvider router={router} />
 );
+
+export const isProduction = process.env.NODE_ENV === 'production'
+export const isDevelopment = process.env.NODE_ENV === 'development'
+
+export const websiteUrl = isProduction
+  ? 'https://gradetrack.fly.dev'
+  : '//localhost:4998'
