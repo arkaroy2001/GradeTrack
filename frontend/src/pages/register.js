@@ -27,7 +27,7 @@ const Register =()=>{
                 <form id="signup-form">
                     <input type="text" placeholder="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
                     <input type="text" placeholder="username" value={username} onChange={(e)=>setUsername(e.target.value)}/>
-                    <input type="text" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
+                    <input type="password" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
                     <button type="button" onClick={registerUser}>Login</button>
                 </form>
             </div>

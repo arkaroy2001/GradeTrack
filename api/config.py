@@ -8,11 +8,11 @@ load_dotenv(os.path.join(basedir, '.env'))
 
 class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY")
-    #'postgresql://postgres:postgres@localhost/gradetrack_dev' or\
+    #SQLALCHEMY_DATABASE_URI='postgresql://postgres:postgres@localhost/gradetrack_dev'
     SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:8t8rbjoNt70cOmO@gradetrack-postgres.flycast:5432/gradetrack?sslmode=disable' or\
         os.environ.get('DATABASE_URL')
-        
-                            
+    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}     
+                           
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     SESSION_TYPE = 'redis'

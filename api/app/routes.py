@@ -205,11 +205,11 @@ def addNewMain():
     weight = request.json.get('main_group_weight')
     grade = request.json.get('main_group_grade')
 
-    if type(weight) is not int or type(weight) is not float:
-        return jsonify({"error":"invalid type"}), 408
+    # if type(weight) is not int or type(weight) is not float:
+    #     return jsonify({"error":"invalid type"}), 408
 
-    if type(grade) is not int or type(grade) is not float:
-        return jsonify({"error":"invalid type"}), 408
+    # if type(grade) is not int or type(grade) is not float:
+    #     return jsonify({"error":"invalid type"}), 408
 
     if main_group_name=="" or main_group_name is None:
         return jsonify({"error":main_group_name}),406

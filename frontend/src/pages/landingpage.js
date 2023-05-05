@@ -74,7 +74,7 @@ const LandingPage = () => {
                             <form id="login-form">
                                 <h1>Sign In</h1>
                                 <input type="text" placeholder="E-mail" value={email} onChange={(e)=>setEmail(e.target.value)}/>
-                                <input id="signin-password" type="text" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
+                                <input id="signin-password" type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
                                 <button type="button" onClick={logInUser}>Login</button>
                             </form>
                             <a href="/register">
