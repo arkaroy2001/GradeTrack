@@ -1,0 +1,13 @@
+# fly.toml app configuration file generated for gradetrack on 2023-05-04T16:47:43-07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "gradetrack"
+primary_region = "lax"
+
+[http_service]
+  internal_port = 4998
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true

@@ -61,6 +61,20 @@ def get_all_users():
     users = User.query.all()
 
     return jsonify(json_list=[i.serialize for i in users])
+
+@calc_app.route('/delete-all-users',methods=['POST'])
+def removeAllUsers():
+
+    all_users = User.query.all()
+    
+    if all_users is None:
+        return jsonify({"error": "Unauthorized"}),409
+
+    for i in all_users:
+        db.session.delete(i)
+        db.session.commit()
+
+    return "200"
     
 @calc_app.route('/login', methods=['POST'])
 def login():
@@ -69,7 +83,10 @@ def login():
 
     user = User.query.filter_by(email=email).first()
 
-    if user is None or not user.check_password(password):
+    if user is None:
+        return jsonify({"error":"Unauthorized"}),401
+
+    if not user.check_password(password):
         return jsonify({"error":"Unauthorized"}),401
 
     session["user_id"] = user.id
@@ -188,22 +205,26 @@ def addNewMain():
     weight = request.json.get('main_group_weight')
     grade = request.json.get('main_group_grade')
 
+    if type(weight) is not int or type(weight) is not float:
+        return jsonify({"error":"invalid type"}), 408
+
+    if type(grade) is not int or type(grade) is not float:
+        return jsonify({"error":"invalid type"}), 408
+
     if main_group_name=="" or main_group_name is None:
         return jsonify({"error":main_group_name}),406
 
     if class_id=="" or class_id is None:
         return jsonify({"error":class_id}),402
 
-    class_name = getClassName(user_id,class_id)
-
     group_type = 'main'
     
-    group_exists = Group.query.filter_by(user_id=user_id,name=main_group_name,class_id=class_id,group_type=group_type,class_name=class_name.class_name).first()
+    group_exists = Group.query.filter_by(user_id=user_id,name=main_group_name,class_id=class_id,group_type=group_type).first()
 
     if group_exists is not None:
         return jsonify({"error": "Unauthorized"}),409
 
-    new_group = Group(grade=grade,class_name=class_name.class_name,name=main_group_name,group_type=group_type,weight=weight,class_id=class_id,user_id=user_id)
+    new_group = Group(grade=grade,name=main_group_name,group_type=group_type,weight=weight,class_id=class_id,user_id=user_id)
     
     db.session.add(new_group)
     db.session.commit()
@@ -322,6 +343,12 @@ def removeSingleMainGroup():
         "main_group_name": main_group_name
     })
 
+
+def getClassIdFromName(name,user_id):
+    class_obj = Classes.query.filter_by(class_name=name,user_id=user_id).first()
+    if class_obj: return class_obj.id
+    else: return -1
+
 @calc_app.route('/delete-all-main-groups',methods=['POST'])
 def removeAllMainGroupsForClass():
     #main_group_name = request.json.get("name")
@@ -331,8 +358,10 @@ def removeAllMainGroupsForClass():
 
     if not user_id:
         return jsonify({"error":"Unauthorized"}),401
+
+    class_id = getClassIdFromName(class_name,user_id);    
     
-    class_groups = Group.query.filter_by(user_id=user_id,class_name=class_name).all()
+    class_groups = Group.query.filter_by(user_id=user_id,class_id=class_id).all()
     
     if class_groups is None:
         return jsonify({"error": "Unauthorized"}),409

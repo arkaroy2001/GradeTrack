@@ -43,7 +43,7 @@ const LandingPage = () => {
                 setUser(res.data);
             })
             .catch(err=>{
-                console.log("Not authenticated");
+                console.log("Not authenticated",err);
                 setUser('x');
             })
              

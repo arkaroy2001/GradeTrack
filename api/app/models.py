@@ -31,7 +31,7 @@ class User(db.Model,Base):
        }
 
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+        self.password_hash = generate_password_hash(password).decode('utf8')
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
@@ -54,7 +54,6 @@ class Group(db.Model,Base):
     weight = db.Column(db.Integer)
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    class_name = db.Column(db.String(64), db.ForeignKey('classes.class_name'))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     def __repr__(self):
         return '<Task {}>'.format(self.name)
@@ -70,8 +69,7 @@ class Group(db.Model,Base):
            'main_group_weight':self.weight,
            'timestamp'         : self.timestamp,
            'user_id'         : self.user_id,
-           'class_id': self.class_id,
-           'class_name':self.class_name
+           'class_id': self.class_id
        }
 
 class Classes(db.Model,Base):
