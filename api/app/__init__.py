@@ -27,3 +27,6 @@ migrate = Migrate(calc_app, db,render_as_batch=True)
 server_session = Session(calc_app)
 
 from app import routes, models 
+
+db.create_all()
+db.session.commit()

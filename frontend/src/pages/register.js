@@ -7,7 +7,7 @@ const Register =()=>{
     const [password,setPassword] = useState("")
 
     const registerUser = async ()=>{
-        await httpClient.post("//localhost:4998/register",{
+        await httpClient.post("https://gradetrack.fly.dev/register",{
             email,
             username,
             password

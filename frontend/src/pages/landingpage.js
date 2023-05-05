@@ -15,7 +15,7 @@ const LandingPage = () => {
     const [password,setPassword] = useState("")
 
     const logInUser = async ()=>{
-        await httpClient.post("//localhost:4998/login",{
+        await httpClient.post("https://gradetrack.fly.dev/login",{
             email,
             password
         })
@@ -29,7 +29,7 @@ const LandingPage = () => {
     }
 
     const logoutUser = async () =>{
-        await httpClient.post("//localhost:4998/logout")
+        await httpClient.post("https://gradetrack.fly.dev/logout")
         .catch(err=>{
             console.log("You messed up");
         });
@@ -38,7 +38,7 @@ const LandingPage = () => {
 
     useEffect(()=>{
         (async()=>{
-            await httpClient.get("//localhost:4998/@me")
+            await httpClient.get("https://gradetrack.fly.dev/@me")
             .then(res=>{
                 setUser(res.data);
             })

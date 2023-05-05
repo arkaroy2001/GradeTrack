@@ -31,7 +31,7 @@ const MainView = () =>{
 
     useEffect(()=>{
         (async()=>{
-            await httpClient.get("//localhost:4998/correct-user")
+            await httpClient.get("https://gradetrack.fly.dev/correct-user")
             .then(res=>{
                 //console.log(res.data);
                 setUser(res.data);
@@ -45,7 +45,7 @@ const MainView = () =>{
     //update final grade for class when main Groups change
     useEffect(()=>{ 
             (async()=>{
-                await httpClient.post("//localhost:4998/get-final-grade",{
+                await httpClient.post("https://gradetrack.fly.dev/get-final-grade",{
                     "user_id":user_id,
                     "class_id":class_id
                 })
@@ -115,7 +115,7 @@ const MainView = () =>{
 
     //handles the api call for adding a main group
     const addNewMainGroup=async()=>{
-        await httpClient.post("//localhost:4998/add-main-group",{
+        await httpClient.post("https://gradetrack.fly.dev/add-main-group",{
             "main_group_name": mainGroupData.main_group_name,
             "main_group_grade": mainGroupData.main_group_grade,
             "main_group_weight": mainGroupData.main_group_weight,
@@ -162,7 +162,7 @@ const MainView = () =>{
 
     //handles api call for removing a main group
     const removeMainGroup = async(name)=>{
-        await httpClient.post("//localhost:4998/delete-main-group",{
+        await httpClient.post("https://gradetrack.fly.dev/delete-main-group",{
             name
         })
         .then(res=>{
@@ -182,7 +182,7 @@ const MainView = () =>{
     //main groups for that class
     useEffect(()=>{
             (async()=>{
-                await httpClient.post("//localhost:4998/get-main-group",param)
+                await httpClient.post("https://gradetrack.fly.dev/get-main-group",param)
                 .then(res=>{
                     //console.log(res.data);
                     setMainGroups([]); //wipes curr group data clean depending on which class user picks
@@ -213,7 +213,7 @@ const MainView = () =>{
 
     //api call for updating main group name
     const updateMainGroupName = async (og_name, new_name) =>{
-        await httpClient.put("//localhost:4998/update-main-group-name",{
+        await httpClient.put("https://gradetrack.fly.dev/update-main-group-name",{
             class_id,
             og_name,
             new_name
@@ -244,7 +244,7 @@ const MainView = () =>{
     //api call for updating main group grade
       const updateMainGroupGrade = async (og_grade, new_grade,name) =>{
         console.log(class_id,og_grade,new_grade);
-        await httpClient.put("//localhost:4998/update-main-group-grade",{
+        await httpClient.put("https://gradetrack.fly.dev/update-main-group-grade",{
             class_id,
             og_grade,
             new_grade,
@@ -278,7 +278,7 @@ const MainView = () =>{
     //api call for updating main group weight
     const updateMainGroupWeight = async (og_weight, new_weight,name) =>{
         console.log(class_id,og_weight,new_weight,name);
-        await httpClient.put("//localhost:4998/update-main-group-weight",{
+        await httpClient.put("https://gradetrack.fly.dev/update-main-group-weight",{
             class_id,
             og_weight,
             new_weight,

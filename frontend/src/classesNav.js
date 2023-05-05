@@ -11,7 +11,7 @@ const ClassesNav = ({user_id})=>{
 
     useEffect(()=>{
         (async()=>{
-            await httpClient.get("//localhost:4998/get-classes")
+            await httpClient.get("https://gradetrack.fly.dev/get-classes")
             .then(res=>{
                 //console.log("BITCH",res.data.json_list);
                 for(let i=0; i<res.data.json_list.length;i++){
@@ -37,7 +37,7 @@ const ClassesNav = ({user_id})=>{
     }
 
     const addClass = async () =>{
-        await httpClient.post("//localhost:4998/add-class",{
+        await httpClient.post("https://gradetrack.fly.dev/add-class",{
             currClass
         })
         .then(res=>{
@@ -57,7 +57,7 @@ const ClassesNav = ({user_id})=>{
 
     const removeGroupsForClass = async(id) =>{
         console.log(id);
-        await httpClient.post("//localhost:4998/delete-all-main-groups",{
+        await httpClient.post("https://gradetrack.fly.dev/delete-all-main-groups",{
             "class_name":id
         })
         .then(res=>{
@@ -80,7 +80,7 @@ const ClassesNav = ({user_id})=>{
     }
 
     const removeClass = async (id,index) =>{
-        await httpClient.post("//localhost:4998/remove-class",{
+        await httpClient.post("https://gradetrack.fly.dev/remove-class",{
             id
         })
         .then(res=>{
