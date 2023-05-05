@@ -13,8 +13,8 @@ def checkBrowser():
     user_agent = parse(user_agent_string)
     print(user_agent.browser.family)
     if user_agent.browser.family == 'Safari':
-        calc_app.config['SESSION_COOKIE_SECURE'] = True
-        calc_app.config['SESSION_COOKIE_SAMESITE'] = "None"
+        calc_app.config['SESSION_COOKIE_SECURE'] = False
+        calc_app.config['SESSION_COOKIE_SAMESITE'] = "Strict"
 
     else:
         calc_app.config['SESSION_COOKIE_SECURE'] = True
