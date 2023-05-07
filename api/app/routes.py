@@ -318,6 +318,9 @@ def updateSingleMainGroupWeight():
         return jsonify({"error":"Unauthorized"}),401
 
     main_group = Group.query.filter_by(user_id=user_id,class_id=class_id,name=name,weight=original_weight).first()
+    if not main_group:
+        return jsonify({"error":"No such main group"}),402
+        
     main_group.weight = new_weight
     db.session.commit()
 

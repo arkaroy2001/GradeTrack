@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import httpClient from "../httpClient";
+import background from '../landing-back.png'
 
 const Register =()=>{
     const [email,setEmail] = useState("")
@@ -21,14 +22,20 @@ const Register =()=>{
         })
     }
     return (
-        <div class="page">
-            <div class="form">
-                <h1>Register</h1>
+       <div class="page" style={{ backgroundImage: `url(${background})`, 
+                backgroundRepeat:'no-repeat', backgroundSize:'cover',
+                backgroundPosition:'center',width:'100vw', height:'100vh'}}>
+            <div class="form"style={{transform: 'scale(1.3)'}}>
+                <h1>GradeTrack</h1>
+                <h1 style={{color:'white'}}>Register</h1>
                 <form id="signup-form">
                     <input type="text" placeholder="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
                     <input type="text" placeholder="username" value={username} onChange={(e)=>setUsername(e.target.value)}/>
                     <input type="password" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
-                    <button type="button" onClick={registerUser}>Login</button>
+                    <button type="button" onClick={registerUser}>Register</button>
+                    <a href="/">
+                                <p>Login</p>
+                    </a>
                 </form>
             </div>
         </div>

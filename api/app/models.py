@@ -50,27 +50,48 @@ class Group(db.Model,Base):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(64))
     group_type = db.Column(db.String(10))
-    grade = db.Column(db.Integer, default=0)
-    weight = db.Column(db.Integer)
+    grade = db.Column(db.Numeric(5,2))
+    weight = db.Column(db.Numeric(5,2))
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, index=True, default=func.now())
     def __repr__(self):
         return '<Task {}>'.format(self.name)
 
     @property
     def serialize(self):
-       """Return object data in easily serializable format"""
-       return {
-           'main_group_id'         : self.id,
-           'main_group_name' : self.name,
-           'group_type':self.group_type,
-           'main_group_grade':self.grade,
-           'main_group_weight':self.weight,
-           'timestamp'         : self.timestamp,
-           'user_id'         : self.user_id,
-           'class_id': self.class_id
-       }
+        new_grade = self.grade
+
+        if int(new_grade*100) % 10 == 0:
+            string_num = str(new_grade)
+            new_grade = float(string_num[:-1])
+        
+
+        if (int(new_grade*100) // 10) % 10 == 0:
+            string_num_2 = str(new_grade)
+            new_grade = float(string_num_2[:-1])
+
+        new_weight = self.weight
+
+        if int(new_weight*100) % 10 == 0:
+            string_weight = str(new_weight)
+            new_weight = float(string_weight[:-1])
+        
+
+        if (int(new_weight*100) // 10) % 10 == 0:
+            string_weight_2 = str(new_weight)
+            new_weight = float(string_weight_2[:-1])
+
+        return {
+            'main_group_id'         : self.id,
+            'main_group_name' : self.name,
+            'group_type':self.group_type,
+            'main_group_grade':new_grade,
+            'main_group_weight':new_weight,
+            'timestamp'         : self.timestamp,
+            'user_id'         : self.user_id,
+            'class_id': self.class_id
+        }
 
 class Classes(db.Model,Base):
     __tablename__ = 'classes'
@@ -115,12 +136,16 @@ class Classes(db.Model,Base):
     @property
     def serialize(self):
        """Return object data in easily serializable format"""
+       final_grade_trunc = self.final_grade
+       if self.final_grade is not None:
+            final_grade_trunc = round(final_grade_trunc,2)
+        
        return {
            'class_id'         : self.id,
            'class_name' : self.class_name,
            'timestamp'         : self.timestamp,
            'user_id'         : self.user_id,
-           'grade': self.final_grade
+           'grade': final_grade_trunc
        }
     
     @property
