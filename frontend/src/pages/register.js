@@ -1,6 +1,7 @@
 import React,{useState} from 'react';
 import httpClient from "../httpClient";
 import background from '../landing-back.png'
+import {websiteUrl} from '../index.js'
 
 const Register =()=>{
     const [email,setEmail] = useState("")
@@ -8,7 +9,7 @@ const Register =()=>{
     const [password,setPassword] = useState("")
 
     const registerUser = async ()=>{
-        await httpClient.post("https://gradetrack.fly.dev/register",{
+        await httpClient.post(websiteUrl + "/register",{
             email,
             username,
             password

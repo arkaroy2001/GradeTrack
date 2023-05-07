@@ -18,9 +18,10 @@ EXPOSE 5432
 ENV PYTHONUNBUFFERED 1
 ENV FLASK_APP calc.py
 
-ENV DATABASE_URL postgresql://postgres:8t8rbjoNt70cOmO@gradetrack-postgres.flycast:5432
+ENV DATABASE_URL postgresql://postgres:s7FZcQV5ETLUk0u@gradetrack-db.flycast:5432
 ENV DATABASE_USERNAME postgres
-ENV DATABASE_PASSWORD 8t8rbjoNt70cOmO
+ENV DATABASE_PASSWORD s7FZcQV5ETLUk0u
+
 
 # Run necessary services
 # CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]

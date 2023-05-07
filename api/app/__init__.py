@@ -26,7 +26,4 @@ db = SQLAlchemy(calc_app, metadata)
 migrate = Migrate(calc_app, db,render_as_batch=True)
 server_session = Session(calc_app)
 
-db.create_all()
-db.session.commit()
-
 from app import routes, models 

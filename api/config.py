@@ -13,7 +13,7 @@ class Config(object):
         SQLALCHEMY_DATABASE_URI='postgresql://postgres:postgres@localhost/gradetrack_dev'
         SESSION_REDIS = redis.from_url("redis://localhost:6379")
     else:
-        SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:8t8rbjoNt70cOmO@gradetrack-postgres.flycast:5432/gradetrack?sslmode=disable' or\
+        SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:s7FZcQV5ETLUk0u@gradetrack-db.flycast:5432' or\
             os.environ.get('DATABASE_URL')
         SESSION_REDIS = redis.from_url("redis://default:8ae7eb3a9e494687872e669601a0a575@fly-gradecalc.upstash.io")
 

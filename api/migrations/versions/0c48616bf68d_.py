@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 589029d293fc
+Revision ID: 0c48616bf68d
 Revises: 
-Create Date: 2023-05-03 13:56:16.928249
+Create Date: 2023-05-07 00:55:47.320358
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '589029d293fc'
+revision = '0c48616bf68d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,7 +23,7 @@ def upgrade():
     sa.Column('username', sa.String(length=64), nullable=True),
     sa.Column('email', sa.String(length=120), nullable=True),
     sa.Column('password_hash', sa.String(length=128), nullable=True),
-    sa.PrimaryKeyConstraint('id', name=op.f('pk_user'))
+    sa.PrimaryKeyConstraint('id')
     )
     with op.batch_alter_table('user', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_user_email'), ['email'], unique=True)
@@ -34,8 +34,8 @@ def upgrade():
     sa.Column('class_name', sa.String(length=64), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], name=op.f('fk_classes_user_id_user')),
-    sa.PrimaryKeyConstraint('id', name=op.f('pk_classes'))
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     with op.batch_alter_table('classes', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_classes_timestamp'), ['timestamp'], unique=False)
@@ -44,16 +44,14 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=64), nullable=True),
     sa.Column('group_type', sa.String(length=10), nullable=True),
-    sa.Column('grade', sa.Integer(), nullable=True),
-    sa.Column('weight', sa.Integer(), nullable=True),
+    sa.Column('grade', sa.Numeric(precision=5, scale=2), nullable=True),
+    sa.Column('weight', sa.Numeric(precision=5, scale=2), nullable=True),
     sa.Column('class_id', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.Column('class_name', sa.String(length=64), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
-    sa.ForeignKeyConstraint(['class_id'], ['classes.id'], name=op.f('fk_group_class_id_classes')),
-    sa.ForeignKeyConstraint(['class_name'], ['classes.class_name'], name=op.f('fk_group_class_name_classes')),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], name=op.f('fk_group_user_id_user')),
-    sa.PrimaryKeyConstraint('id', name=op.f('pk_group'))
+    sa.ForeignKeyConstraint(['class_id'], ['classes.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     with op.batch_alter_table('group', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_group_timestamp'), ['timestamp'], unique=False)
