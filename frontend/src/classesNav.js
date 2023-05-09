@@ -111,7 +111,7 @@ const ClassesNav = ({user_id})=>{
                 </li>
                 )}
             </ul>
-            <button type="button" onClick={handleSubmit}>+</button>
+            <button type="submit" onClick={handleSubmit}>+</button>
             <input 
                 type="text" 
                 name="className" 

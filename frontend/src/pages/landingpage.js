@@ -20,6 +20,12 @@ const LandingPage = () => {
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
 
+    const handleSubmit = event => {
+        event.preventDefault();
+    
+        logInUser();
+      };
+
     const logInUser = async ()=>{
         await httpClient.post(websiteUrl + "/login",{
             email,
@@ -85,7 +91,7 @@ const LandingPage = () => {
                                 <h1 style={{color:'white'}}>Sign In</h1>
                                 <input type="text" placeholder="E-mail" value={email} onChange={(e)=>setEmail(e.target.value)}/>
                                 <input id="signin-password" type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
-                                <button type="button" onClick={logInUser}>Login</button>
+                                <button type="submit" onClick={handleSubmit}>Login</button>
                             </form>
                             <a href="/register">
                                 <p>Register</p>

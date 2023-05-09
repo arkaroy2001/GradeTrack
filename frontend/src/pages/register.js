@@ -8,6 +8,12 @@ const Register =()=>{
     const [username,setUsername] = useState("")
     const [password,setPassword] = useState("")
 
+    const handleSubmit = event => {
+        event.preventDefault();
+    
+        registerUser();
+      };
+
     const registerUser = async ()=>{
         await httpClient.post(websiteUrl + "/register",{
             email,
@@ -33,7 +39,7 @@ const Register =()=>{
                     <input type="text" placeholder="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
                     <input type="text" placeholder="username" value={username} onChange={(e)=>setUsername(e.target.value)}/>
                     <input type="password" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
-                    <button type="button" onClick={registerUser}>Register</button>
+                    <button type="submit" onClick={handleSubmit}>Register</button>
                     <a href="/">
                                 <p>Login</p>
                     </a>
