@@ -106,7 +106,6 @@ class Classes(db.Model,Base):
             )
         .where(Group.user_id==user_id)
         .where(id==Group.class_id)
-        .where(Group.group_type=='main')
         .scalar_subquery()
     )
 

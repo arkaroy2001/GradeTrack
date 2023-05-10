@@ -56,8 +56,8 @@ const MainView = () =>{
                     }
                     else{
                         setFinalGrade('');
-                        //console.log("HERE");
-                        //console.log(res.data.json_list[0]["grade"]);
+                        // console.log("HERE");
+                        // console.log(res.data.json_list[0]["grade"]);
                         setFinalGrade(res.data.json_list[0]["grade"].toString());
                     }  
                 })
@@ -231,19 +231,14 @@ const MainView = () =>{
     const handleGradeChange = (event,index) => {
         let og_grade = event.target.getAttribute('value')//original value
         let new_grade = event.target.value; //new value
-
+        
         if (og_grade != new_grade){
-            let newMainGroups = [...mainGroups];
-            let item = {...newMainGroups[index]};
-            item.main_group_grade = new_grade;
-            newMainGroups[index] = item;
-            setMainGroups(newMainGroups);
             let name = event.target.parentNode.parentNode.childNodes[1].firstChild.getAttribute('value');
-            updateMainGroupGrade(og_grade, new_grade, name );//send api call
+            updateMainGroupGrade(og_grade, new_grade, name, index);//send api call
         }
     };
     //api call for updating main group grade
-      const updateMainGroupGrade = async (og_grade, new_grade,name) =>{
+      const updateMainGroupGrade = async (og_grade, new_grade,name, index) =>{
         console.log(class_id,og_grade,new_grade);
         await httpClient.put(websiteUrl + "/update-main-group-grade",{
             class_id,
@@ -252,6 +247,11 @@ const MainView = () =>{
             name
         })
         .then(res=>{
+            let newMainGroups = [...mainGroups];
+            let item = {...newMainGroups[index]};
+            item.main_group_grade = new_grade;
+            newMainGroups[index] = item;
+            setMainGroups(newMainGroups);
             console.log("update group grade success");
         })
         .catch(err=>{
@@ -266,18 +266,13 @@ const MainView = () =>{
         let new_weight = event.target.value; //new value
 
         if (og_weight != new_weight){
-            let newMainGroups = [...mainGroups];
-            let item = {...newMainGroups[index]};
-            item.main_group_weight = new_weight;
-            newMainGroups[index] = item;
-            setMainGroups(newMainGroups);
             let name = event.target.parentNode.parentNode.childNodes[1].firstChild.getAttribute('value');
-            updateMainGroupWeight(og_weight,new_weight,name);//send api call
+            updateMainGroupWeight(og_weight,new_weight,name,index);//send api call
         }
 
     };
     //api call for updating main group weight
-    const updateMainGroupWeight = async (og_weight, new_weight,name) =>{
+    const updateMainGroupWeight = async (og_weight, new_weight,name,index) =>{
         console.log(class_id,og_weight,new_weight,name);
         await httpClient.put(websiteUrl + "/update-main-group-weight",{
             class_id,
@@ -286,6 +281,11 @@ const MainView = () =>{
             name
         })
         .then(res=>{
+            let newMainGroups = [...mainGroups];
+            let item = {...newMainGroups[index]};
+            item.main_group_weight = new_weight;
+            newMainGroups[index] = item;
+            setMainGroups(newMainGroups);
             console.log("update group name success");
         })
         .catch(err=>{
