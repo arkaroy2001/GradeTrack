@@ -4,12 +4,13 @@ from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, '.env'))
-mode=os.environ.get('MODE')
 
 class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY")
 
-    if mode == 'PRODUCTION':
+    x=1
+
+    if x == 1:
         SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:s7FZcQV5ETLUk0u@gradetrack-db.flycast:5432' or\
             os.environ.get('DATABASE_URL')
         SESSION_REDIS = redis.from_url("redis://default:8ae7eb3a9e494687872e669601a0a575@fly-gradecalc.upstash.io")
