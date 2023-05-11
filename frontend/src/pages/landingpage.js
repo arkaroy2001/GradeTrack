@@ -83,20 +83,18 @@ const LandingPage = () => {
                 <div style={{ backgroundImage: `url(${background})`, 
                 backgroundRepeat:'no-repeat', backgroundSize:'cover',
                 backgroundPosition:'center',width:'100vw', height:'100vh'}}>
-                {/* <div> */}
-                    <div class="page">
-                        <div class="form" style={{transform: 'scale(1.3)'}}>
-                            <form id="login-form">
-                                <h1>GradeTrack</h1>
-                                <h1 style={{color:'white'}}>Sign In</h1>
-                                <input type="text" placeholder="E-mail" value={email} onChange={(e)=>setEmail(e.target.value)}/>
-                                <input id="signin-password" type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
-                                <button type="submit" onClick={handleSubmit}>Login</button>
-                            </form>
-                            <a href="/register">
-                                <p>Register</p>
-                            </a>
-                        </div>
+                    <div class="form" style={{transform: 'scale(1.2)', float:'right', marginRight:'100px',
+                                                marginTop:'130px'}}>
+                        <form id="login-form">
+                            <h1>GradeTrack</h1>
+                            <h1 style={{color:'white'}}>Sign In</h1>
+                            <input type="text" placeholder="E-mail" value={email} onChange={(e)=>setEmail(e.target.value)}/>
+                            <input id="signin-password" type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
+                            <button type="submit" onClick={handleSubmit}>Login</button>
+                        </form>
+                        <a href="/register">
+                            <p>Register</p>
+                        </a>
                     </div>
                 </div>
             )}

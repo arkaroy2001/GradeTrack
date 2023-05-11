@@ -32,7 +32,7 @@ const Register =()=>{
        <div class="page" style={{ backgroundImage: `url(${background})`, 
                 backgroundRepeat:'no-repeat', backgroundSize:'cover',
                 backgroundPosition:'center',width:'100vw', height:'100vh'}}>
-            <div class="form"style={{transform: 'scale(1.3)'}}>
+            <div class="form"style={{transform: 'scale(1.2)', float:'right', marginRight:'100px'}}>
                 <h1>GradeTrack</h1>
                 <h1 style={{color:'white'}}>Register</h1>
                 <form id="signup-form">
