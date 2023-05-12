@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import httpClient from "../httpClient";
 import background from '../landing-back.png'
 import {websiteUrl} from '../index.js'
+import validator from 'validator';
 
 const Register =()=>{
     const [email,setEmail] = useState("")
@@ -10,8 +11,12 @@ const Register =()=>{
 
     const handleSubmit = event => {
         event.preventDefault();
-    
-        registerUser();
+        
+        if (validator.isEmail(email)) {
+            registerUser();
+        } else {
+            alert("Please, enter valid Email!");
+        }
       };
 
     const registerUser = async ()=>{
