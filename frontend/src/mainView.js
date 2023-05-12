@@ -151,23 +151,21 @@ const MainView = () =>{
 
     //gets called when user deletes main group 
     const handleDelete = (name,index)=>{
-        console.log("PALOOZA " + index);
-
-        const newMainGroups = cloneDeep(mainGroups);
-
-        newMainGroups.splice(index,1);
-
-        setMainGroups(newMainGroups);
-        removeMainGroup(name);
+        removeMainGroup(name,index);
     }
 
     //handles api call for removing a main group
-    const removeMainGroup = async(name)=>{
+    const removeMainGroup = async(name,index)=>{
         await httpClient.post(websiteUrl + "/delete-main-group",{
             name
         })
         .then(res=>{
             console.log("Remove main group successful");
+            const newMainGroups = cloneDeep(mainGroups);
+
+            newMainGroups.splice(index,1);
+
+            setMainGroups(newMainGroups);
         })
         .catch(err=>{
             alert(err);
